@@ -1,0 +1,29 @@
+frontend/
+│
+├─ public/                  # 公共資源，如 favicon、index.html
+│
+├─ src/
+│   ├─ assets/              # 圖片、icon、樣式檔
+│   │
+│   ├─ components/          # 可重用元件
+│   │   ├─ Header.jsx
+│   │   ├─ Footer.jsx
+│   │   ├─ StockCard.jsx    # 單個股票卡片
+│   │
+│   ├─ pages/               # 路由頁面
+│   │   ├─ Home.jsx
+│   │   ├─ Stocks.jsx       # 股票列表頁
+│   │   ├─ StockDetail.jsx  # 單一股票詳情頁
+│   │
+│   ├─ services/            # 對 API 或 mock 資料的請求
+│   │   ├─ stockService.js
+│   │
+│   ├─ data/                # Mock 資料
+│   │   └─ mockStocks.js
+│   │
+│   ├─ App.jsx              # 主程式
+│   ├─ main.jsx             # React 啟動點
+│   └─ index.css            # 全域樣式
+│
+├─ package.json
+└─ vite.config.js
