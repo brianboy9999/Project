@@ -2,10 +2,18 @@
 1.Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 2.venv\Scripts\activate
 
+退出虛擬環境
+1.deactivate
+
 更新套件 : 
 1.pip freeze > requirements.txt
 
-# 爬蟲工具判斷
+編譯器沒抓到
+1.按 Ctrl+Shift+P
+2.輸入 Python: Select Interpreter
+3.輸入venv內python.exe的路徑
+
+爬蟲工具判斷
 1.打開開發者工具（F12）→ Network → XHR / Fetch
 → 檢查網頁是否有向 API 發請求，回傳 JSON
 2.查看 HTML 原始碼（Ctrl+U）

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Query, HTTPException
 from typing import List, Optional
 
-from services.stock_crawler_service import(
+from backend.services.stock_crawler import(
     get_all_nasdaq_tickers,
     get_single_stock,
     get_multiple_stock
