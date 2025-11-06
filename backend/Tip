@@ -1,0 +1,18 @@
+啟動虛擬環境 : 
+1.Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+2.venv\Scripts\activate
+
+更新套件 : 
+1.pip freeze > requirements.txt
+
+# 爬蟲工具判斷
+1.打開開發者工具（F12）→ Network → XHR / Fetch
+→ 檢查網頁是否有向 API 發請求，回傳 JSON
+2.查看 HTML 原始碼（Ctrl+U）
+→ 判斷資料是否直接存在 HTML
+3.注意動態載入（Infinite scroll / 按鈕載入更多）
+→ 可能需要模擬瀏覽器或找 API
+
+有 API → 用 API（首選）
+HTML 靜態 → 用 BeautifulSoup
+JS 動態無 API → 用 Selenium/Playwright
