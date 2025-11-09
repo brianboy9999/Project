@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Query, HTTPException
 from typing import List, Optional
 
-from backend.services.stock_crawler import(
+from services.stock_crawler import(
     get_all_nasdaq_tickers,
     get_single_stock,
     get_multiple_stock
@@ -14,9 +14,21 @@ router = APIRouter(prefix = "/stock", tags = ["Stock"])
 def get_stock_list():
     try:
         tickers = get_all_nasdaq_tickers()
-        return {"count": len(tickers), "data": tickers}
+        return {
+            "status": "success",
+            "count": len(tickers), 
+            "data": tickers
+        }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        print(f"Error in get_stock_list: {str(e)}")  # 添加服務器端日誌
+        raise HTTPException(
+            status_code=500, 
+            detail={
+                "status": "error",
+                "message": "無法獲取股票列表",
+                "error": str(e)
+            }
+        )
 
 #單支股票 
 @router.get("/{ticker}")

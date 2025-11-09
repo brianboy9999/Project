@@ -1,3 +1,14 @@
+開啟vite : npm run dev
+開啟網址 : http://localhost:5173/
+
+assets/ : 放圖片、圖示、字型等靜態資源
+App.tsx : 主要「畫面元件」(Component)
+App.css : App.tsx 這個畫面的專用樣式
+index.css : 全域（整個網站）共用的樣式
+main.tsx : React 程式的進入點
+
+
+
 frontend/
 │
 ├─ public/                  # 公共資源，如 favicon、index.html
