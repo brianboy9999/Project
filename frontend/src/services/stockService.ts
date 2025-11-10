@@ -1,13 +1,18 @@
 import axios from 'axios';
 import type { StockListResponse, StockData } from '../types/stock';
+import { stockList } from '../data/stockList';
 
 const API_BASE_URL = 'http://localhost:8000';
 
 export const stockService = {
-    // 獲取股票列表
+    // 獲取股票列表（使用本地資料）
     getStockList: async (): Promise<StockListResponse> => {
-        const response = await axios.get(`${API_BASE_URL}/stock/list`);
-        return response.data;
+        // 模擬 API 回應格式
+        return {
+            status: 'success',
+            count: stockList.length,
+            data: stockList
+        };
     },
 
     // 獲取單一股票資料

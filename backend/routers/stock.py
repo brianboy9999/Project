@@ -9,26 +9,7 @@ from services.stock_crawler import(
 
 router = APIRouter(prefix = "/stock", tags = ["Stock"])
 
-# 股票列表
-@router.get("/list")
-def get_stock_list():
-    try:
-        tickers = get_all_nasdaq_tickers()
-        return {
-            "status": "success",
-            "count": len(tickers), 
-            "data": tickers
-        }
-    except Exception as e:
-        print(f"Error in get_stock_list: {str(e)}")  # 添加服務器端日誌
-        raise HTTPException(
-            status_code=500, 
-            detail={
-                "status": "error",
-                "message": "無法獲取股票列表",
-                "error": str(e)
-            }
-        )
+# 股票列表路由已移除，改用前端本地資料
 
 #單支股票 
 @router.get("/{ticker}")
