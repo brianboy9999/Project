@@ -1,8 +1,8 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 import Home from './pages/Home';
-import { StockDashboard } from './pages/stock/StockDashboard';
-import './pages/stock/StockDashboard.css';
+import { StockDashboard } from './pages/stock/StockDashboard/StockDashboard';
+import './pages/stock/StockDashboard/StockDashboard.css';
 
 function App() {
   return (

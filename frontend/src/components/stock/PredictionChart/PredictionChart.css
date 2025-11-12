@@ -1,0 +1,142 @@
+.prediction-chart-container {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.prediction-header {
+  margin-bottom: 20px;
+}
+
+.prediction-header h3 {
+  margin: 0 0 15px 0;
+  color: #1f2937;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.prediction-summary {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+  padding: 15px;
+  background: #f9fafb;
+  border-radius: 6px;
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.metric .label {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.metric .value {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.metric .value.positive {
+  color: #059669;
+}
+
+.metric .value.negative {
+  color: #dc2626;
+}
+
+.metric .change {
+  margin-left: 8px;
+  font-size: 0.875rem;
+}
+
+.custom-tooltip {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.custom-tooltip .date {
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 8px 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.custom-tooltip p {
+  margin: 4px 0;
+  font-size: 0.875rem;
+}
+
+.custom-tooltip .actual {
+  color: #2563eb;
+  font-weight: 500;
+}
+
+.custom-tooltip .predicted {
+  color: #dc2626;
+  font-weight: 500;
+}
+
+.custom-tooltip .confidence {
+  color: #059669;
+  font-size: 0.8rem;
+}
+
+.custom-tooltip .ma5 {
+  color: #ffc658;
+}
+
+.custom-tooltip .ma10 {
+  color: #ff7300;
+}
+
+.custom-tooltip .ma20 {
+  color: #8884d8;
+}
+
+.prediction-info {
+  margin-top: 20px;
+  padding: 15px;
+  background: #fffbeb;
+  border-left: 4px solid #f59e0b;
+  border-radius: 4px;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 8px 0;
+  font-size: 0.875rem;
+  color: #78350f;
+}
+
+.info-item .icon {
+  font-size: 1.25rem;
+}
+
+.info-item:last-child {
+  font-weight: 600;
+  color: #dc2626;
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+  .prediction-summary {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .prediction-chart-container {
+    padding: 15px;
+  }
+}
