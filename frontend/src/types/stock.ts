@@ -9,12 +9,18 @@ export interface StockListResponse {
     data: StockTicker[];
 }
 
-export interface StockData {
-    symbol: string;
+export interface StockPrice {
     date: string;
     open: number;
     high: number;
     low: number;
     close: number;
+    adj_close: number;
     volume: number;
+}
+
+export interface StockData {
+    ticker: string;
+    name: string;
+    prices: StockPrice[];
 }

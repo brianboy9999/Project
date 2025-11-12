@@ -16,8 +16,8 @@ export const stockService = {
     },
 
     // 獲取單一股票資料
-    getSingleStock: async (symbol: string): Promise<StockData[]> => {
-        const response = await axios.get(`${API_BASE_URL}/stock/${symbol}`);
+    getSingleStock: async (ticker: string, period: string = '1mo'): Promise<StockData> => {
+        const response = await axios.get(`${API_BASE_URL}/stock/${ticker}?period=${period}`);
         return response.data;
     }
 };

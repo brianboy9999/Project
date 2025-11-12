@@ -1,12 +1,33 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { StockList } from '../../components/stock/StockList';
-import type { StockTicker } from '../../types/stock';
+import type { StockTicker, StockData } from '../../types/stock';
+import { stockService } from '../../services/stockService';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 type TabType = 'dashboard' | 'watchlist' | 'portfolio' | 'analysis';
 
 export const StockDashboard = () => {
     const [selectedStock, setSelectedStock] = useState<StockTicker | null>(null);
     const [activeTab, setActiveTab] = useState<TabType>('dashboard');
+    const [stockData, setStockData] = useState<StockData | null>(null);
+    const [loading, setLoading] = useState(false);
+    const [period, setPeriod] = useState('1mo');
+
+    // 當選擇股票時，呼叫 API 取得資料
+    useEffect(() => {
+        if (selectedStock) {
+            setLoading(true);
+            stockService.getSingleStock(selectedStock.ticker, period)
+                .then(data => {
+                    setStockData(data);
+                    setLoading(false);
+                })
+                .catch(error => {
+                    console.error('Error fetching stock data:', error);
+                    setLoading(false);
+                });
+        }
+    }, [selectedStock, period]);
 
     const tabs = [
         { id: 'dashboard' as TabType, label: '股票儀表板' },
@@ -29,10 +50,77 @@ export const StockDashboard = () => {
                         {selectedStock && (
                             <div className="stock-detail-container">
                                 <h3>{selectedStock.ticker} - {selectedStock.name}</h3>
-                                <div className="stock-details">
-                                    {/* 這裡之後會加入更多的股票詳細資訊組件 */}
-                                    <p>詳細資訊即將推出...</p>
+                                
+                                {/* 時間區間選擇 */}
+                                <div style={{ marginBottom: '20px' }}>
+                                    <label>時間區間: </label>
+                                    <select 
+                                        value={period} 
+                                        onChange={(e) => setPeriod(e.target.value)}
+                                        style={{ padding: '8px', marginLeft: '10px' }}
+                                    >
+                                        <option value="1d">1天</option>
+                                        <option value="5d">5天</option>
+                                        <option value="1mo">1個月</option>
+                                        <option value="3mo">3個月</option>
+                                        <option value="6mo">6個月</option>
+                                        <option value="1y">1年</option>
+                                        <option value="2y">2年</option>
+                                        <option value="5y">5年</option>
+                                    </select>
                                 </div>
+
+                                {loading && <p>載入中...</p>}
+                                
+                                {!loading && stockData && (
+                                    <div className="stock-details">
+                                        {/* 收盤價折線圖 */}
+                                        <div style={{ marginBottom: '30px' }}>
+                                            <h4>收盤價走勢</h4>
+                                            <ResponsiveContainer width="100%" height={300}>
+                                                <LineChart data={stockData.prices} margin={{ top: 10, right: 30, left: 60, bottom: 10 }}>
+                                                    <CartesianGrid strokeDasharray="3 3" />
+                                                    <XAxis dataKey="date" />
+                                                    <YAxis width={50} />
+                                                    <Tooltip />
+                                                    <Legend />
+                                                    <Line type="monotone" dataKey="close" stroke="#1976d2" name="收盤價" />
+                                                </LineChart>
+                                            </ResponsiveContainer>
+                                        </div>
+
+                                        {/* 成交量折線圖 */}
+                                        <div style={{ marginBottom: '30px' }}>
+                                            <h4>成交量</h4>
+                                            <ResponsiveContainer width="100%" height={300}>
+                                                <LineChart data={stockData.prices} margin={{ top: 10, right: 30, left: 60, bottom: 10 }}>
+                                                    <CartesianGrid strokeDasharray="3 3" />
+                                                    <XAxis dataKey="date" />
+                                                    <YAxis width={50} />
+                                                    <Tooltip />
+                                                    <Legend />
+                                                    <Line type="monotone" dataKey="volume" stroke="#ff7300" name="成交量" />
+                                                </LineChart>
+                                            </ResponsiveContainer>
+                                        </div>
+
+                                        {/* 高低價折線圖 */}
+                                        <div>
+                                            <h4>價格範圍（高/低）</h4>
+                                            <ResponsiveContainer width="100%" height={300}>
+                                                <LineChart data={stockData.prices} margin={{ top: 10, right: 30, left: 60, bottom: 10 }}>
+                                                    <CartesianGrid strokeDasharray="3 3" />
+                                                    <XAxis dataKey="date" />
+                                                    <YAxis width={50} />
+                                                    <Tooltip />
+                                                    <Legend />
+                                                    <Line type="monotone" dataKey="high" stroke="#82ca9d" name="最高價" />
+                                                    <Line type="monotone" dataKey="low" stroke="#ff4444" name="最低價" />
+                                                </LineChart>
+                                            </ResponsiveContainer>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         )}
                     </div>
