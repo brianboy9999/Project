@@ -8,6 +8,21 @@ interface CandlestickChartProps {
     height?: number;
 }
 
+// 計算移動平均線
+const calculateMA = (data: StockPrice[], period: number) => {
+    const result = [];
+    for (let i = period - 1; i < data.length; i++) {
+        const sum = data
+            .slice(i - period + 1, i + 1)
+            .reduce((total, item) => total + item.close, 0);
+        result.push({
+            time: data[i].date,
+            value: sum / period
+        });
+    }
+    return result;
+};
+
 // 檢查是否為週末或最近的數據
 const getDataWarning = (data: StockPrice[]): string | null => {
     if (data.length === 0) return null;
@@ -59,6 +74,12 @@ export const CandlestickChart: React.FC<CandlestickChartProps> = ({
                 borderColor: '#cccccc',
                 timeVisible: true,
                 secondsVisible: false,
+                // 限制縮放範圍
+                minBarSpacing: 0.5,  // 最小柱間距（最多能縮小到什麼程度）
+                // 防止滾動超出數據範圍
+                rightOffset: 0,      // 右側不留空白
+                fixLeftEdge: true,   // 固定左邊界
+                fixRightEdge: true,  // 固定右邊界
             },
         });
 
@@ -106,11 +127,56 @@ export const CandlestickChart: React.FC<CandlestickChartProps> = ({
 
         volumeSeries.setData(volumeData);
 
-        // 自動調整時間範圍
-        chart.timeScale().fitContent();
+        // 添加移動平均線
+        const ma5Data = calculateMA(data, 5);
+        const ma10Data = calculateMA(data, 10);
+        const ma20Data = calculateMA(data, 20);
 
-        // 創建數據映射表，方便查詢
+        // MA5 線 (藍色)
+        const ma5Series = chart.addLineSeries({
+            color: '#2196F3',
+            lineWidth: 2,
+            title: 'MA5',
+            priceLineVisible: false,
+            lastValueVisible: false,
+        });
+        ma5Series.setData(ma5Data);
+
+        // MA10 線 (橙色)
+        const ma10Series = chart.addLineSeries({
+            color: '#FF9800',
+            lineWidth: 2,
+            title: 'MA10',
+            priceLineVisible: false,
+            lastValueVisible: false,
+        });
+        ma10Series.setData(ma10Data);
+
+        // MA20 線 (紫色)
+        const ma20Series = chart.addLineSeries({
+            color: '#9C27B0',
+            lineWidth: 2,
+            title: 'MA20',
+            priceLineVisible: false,
+            lastValueVisible: false,
+        });
+        ma20Series.setData(ma20Data);
+
+        // 自動調整時間範圍並鎖定
+        const timeScale = chart.timeScale();
+        timeScale.fitContent();
+        
+        // 禁用時間軸的平移和縮放超出數據範圍
+        timeScale.applyOptions({
+            lockVisibleTimeRangeOnResize: true,  // 調整大小時鎖定範圍
+            shiftVisibleRangeOnNewBar: false,    // 新數據時不自動移動
+        });
+
+        // 創建數據映射表，方便查詢（包含MA數據）
         const dataMap = new Map(data.map(item => [item.date, item]));
+        const ma5Map = new Map(ma5Data.map(item => [item.time, item.value]));
+        const ma10Map = new Map(ma10Data.map(item => [item.time, item.value]));
+        const ma20Map = new Map(ma20Data.map(item => [item.time, item.value]));
 
         // 十字游標移動事件 - 顯示詳細數據
         chart.subscribeCrosshairMove((param) => {
@@ -142,6 +208,11 @@ export const CandlestickChart: React.FC<CandlestickChartProps> = ({
                 return vol.toString();
             };
 
+            // 獲取MA數值
+            const ma5Value = ma5Map.get(dateStr);
+            const ma10Value = ma10Map.get(dateStr);
+            const ma20Value = ma20Map.get(dateStr);
+
             // 更新提示框內容
             tooltipRef.current.innerHTML = `
                 <div style="font-weight: bold; margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid #e0e0e0;">
@@ -167,6 +238,18 @@ export const CandlestickChart: React.FC<CandlestickChartProps> = ({
                     <span style="font-weight: 600; color: ${isUp ? '#26a69a' : '#ef5350'};">
                         ${isUp ? '+' : ''}$${change.toFixed(2)} (${isUp ? '+' : ''}${changePercent.toFixed(2)}%)
                     </span>
+                    ${ma5Value ? `
+                    <span style="color: #666; margin-top: 4px; padding-top: 4px; border-top: 1px solid #f0f0f0;">MA5:</span>
+                    <span style="font-weight: 500; color: #2196F3;">$${ma5Value.toFixed(2)}</span>
+                    ` : ''}
+                    ${ma10Value ? `
+                    <span style="color: #666;">MA10:</span>
+                    <span style="font-weight: 500; color: #FF9800;">$${ma10Value.toFixed(2)}</span>
+                    ` : ''}
+                    ${ma20Value ? `
+                    <span style="color: #666;">MA20:</span>
+                    <span style="font-weight: 500; color: #9C27B0;">$${ma20Value.toFixed(2)}</span>
+                    ` : ''}
                 </div>
             `;
 

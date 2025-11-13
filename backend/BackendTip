@@ -9,7 +9,11 @@
 1.pip freeze > requirements.txt
 
 啟動後端
-1. D:/Project/Project/backend/venv/Scripts/python.exe -m uvicorn main:app --reload
+1. Set-Location d:\Project\Project\backend
+2. & "D:\Project\Project\backend\venv\Scripts\python.exe" -m uvicorn main:app --reload
+
+# 或者一行指令:
+Set-Location d:\Project\Project\backend ; & "D:\Project\Project\backend\venv\Scripts\python.exe" -m uvicorn main:app --reload
 
 編譯器沒抓到
 1.按 Ctrl+Shift+P

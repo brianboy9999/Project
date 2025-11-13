@@ -1,18 +1,14 @@
 import { useState, useEffect } from 'react';
 import { StockList } from '../../../components/stock/StockList/StockList';
-import PredictionChart from '../../../components/stock/PredictionChart/PredictionChart';
 import { stockService } from '../../../services/stock/stockService';
-import type { CompanyDetail as CompanyDetailType, StockTicker, StockPrediction } from '../../../types/stock/stock';
+import type { CompanyDetail as CompanyDetailType, StockTicker } from '../../../types/stock/stock';
 import './CompanyDetail.css';
 
 export const CompanyDetail = () => {
     const [selectedStock, setSelectedStock] = useState<StockTicker | null>(null);
     const [companyData, setCompanyData] = useState<CompanyDetailType | null>(null);
-    const [prediction, setPrediction] = useState<StockPrediction | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [predictionDays, setPredictionDays] = useState<number>(30);
-    const [showPrediction, setShowPrediction] = useState(false);
 
     // 處理股票選擇（只允許選擇一支）
     const handleStockSelect = (stocks: StockTicker[]) => {
@@ -24,33 +20,10 @@ export const CompanyDetail = () => {
         }
     };
 
-    // 載入預測數據
-    const loadPrediction = async () => {
-        if (!selectedStock) return;
-        
-        setLoading(true);
-        try {
-            const predictionData = await stockService.getStockPrediction(
-                selectedStock.ticker,
-                predictionDays,
-                '1y'
-            );
-            setPrediction(predictionData);
-            setShowPrediction(true);
-        } catch (err) {
-            console.error('Error fetching prediction:', err);
-            setError('無法載入預測資料');
-        } finally {
-            setLoading(false);
-        }
-    };
-
     useEffect(() => {
         if (selectedStock) {
             setLoading(true);
             setError(null);
-            setPrediction(null);
-            setShowPrediction(false);
             
             stockService.getCompanyDetail(selectedStock.ticker)
                 .then(data => {
@@ -182,53 +155,6 @@ export const CompanyDetail = () => {
                     <div className="description">
                         <h4>公司簡介</h4>
                         <p>{info.description}</p>
-                    </div>
-                )}
-            </section>
-
-            {/* 股價預測 */}
-            <section className="prediction-section">
-                <div className="section-header">
-                    <h3>股價預測</h3>
-                    {!showPrediction && (
-                        <div className="prediction-controls">
-                            <label htmlFor="prediction-days">預測天數:</label>
-                            <select 
-                                id="prediction-days"
-                                value={predictionDays} 
-                                onChange={(e) => setPredictionDays(Number(e.target.value))}
-                            >
-                                <option value={7}>7天</option>
-                                <option value={14}>14天</option>
-                                <option value={30}>30天</option>
-                                <option value={60}>60天</option>
-                                <option value={90}>90天</option>
-                            </select>
-                            <button onClick={loadPrediction} className="predict-button">
-                                開始預測
-                            </button>
-                        </div>
-                    )}
-                </div>
-                
-                {showPrediction && prediction && prediction.success && (
-                    <div className="prediction-content">
-                        <PredictionChart prediction={prediction} />
-                        <button 
-                            onClick={() => {
-                                setShowPrediction(false);
-                                setPrediction(null);
-                            }}
-                            className="reset-button"
-                        >
-                            重新預測
-                        </button>
-                    </div>
-                )}
-                
-                {!showPrediction && !prediction && (
-                    <div className="prediction-placeholder">
-                        <p>選擇預測天數後，點擊「開始預測」按鈕來查看 AI 股價預測</p>
                     </div>
                 )}
             </section>

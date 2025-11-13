@@ -2,11 +2,12 @@ import { useState, useEffect, Fragment } from 'react';
 import { StockList } from '../../../components/stock/StockList/StockList';
 import { CandlestickChart } from '../../../components/stock/CandlestickChart/CandlestickChart';
 import { CompanyDetail } from '../CompanyDetail/CompanyDetail';
+import { StockPrediction } from '../StockPrediction/StockPrediction';
 import type { StockTicker, StockData } from '../../../types/stock/stock';
 import { stockService } from '../../../services/stock/stockService';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-type TabType = 'dashboard' | 'company-detail' | 'watchlist' | 'portfolio';
+type TabType = 'dashboard' | 'company-detail' | 'prediction' | 'watchlist' | 'portfolio';
 type ChartType = 'line' | 'candlestick'; // 新增圖表類型
 
 // 計算預設日期（最近一個月）
@@ -92,6 +93,7 @@ export const StockDashboard = () => {
     const tabs = [
         { id: 'dashboard' as TabType, label: '股票儀表板' },
         { id: 'company-detail' as TabType, label: '公司詳情' },
+        { id: 'prediction' as TabType, label: '股票預測' },
         { id: 'watchlist' as TabType, label: '關注清單' },
         { id: 'portfolio' as TabType, label: '投資組合' },
     ];
@@ -391,6 +393,12 @@ export const StockDashboard = () => {
                 return (
                     <div className="tab-content">
                         <CompanyDetail />
+                    </div>
+                );
+            case 'prediction':
+                return (
+                    <div className="tab-content">
+                        <StockPrediction />
                     </div>
                 );
             case 'watchlist':
