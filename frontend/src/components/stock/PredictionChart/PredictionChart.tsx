@@ -79,7 +79,7 @@ const PredictionChart: React.FC<PredictionChartProps> = ({ prediction }) => {
   return (
     <div className="prediction-chart-container">
       <div className="prediction-header">
-        <h3>股價預測分析</h3>
+        <h3>股價預測分析 {prediction.metrics?.model_description && `- ${prediction.metrics.model_description}`}</h3>
         <div className="prediction-summary">
           <div className="metric">
             <span className="label">當前價格:</span>

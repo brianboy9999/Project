@@ -1,11 +1,14 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routers.stock import stock_router
+from routers.stock import stock_comparison_router
+from routers.stock import stock_backtest_router
+from routers.stock import stock_signal_router
 
 app = FastAPI(
     title = "Stock API",
-    description = "提供股票資料與簡單分析",
-    version = "0.1.0"
+    description = "提供股票資料與專業分析",
+    version = "0.2.0"
 )
 
 # 配置 CORS
@@ -22,6 +25,9 @@ app.add_middleware(
 )
 
 app.include_router(stock_router.router)
+app.include_router(stock_comparison_router.router)
+app.include_router(stock_backtest_router.router)
+app.include_router(stock_signal_router.router)
 
 @app.get("/")
 def root():

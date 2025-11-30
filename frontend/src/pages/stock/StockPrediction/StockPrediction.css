@@ -74,21 +74,78 @@
 }
 
 .prediction-header {
-    margin-bottom: 25px;
-    border-bottom: 2px solid #e0e0e0;
-    padding-bottom: 20px;
+    margin-bottom: 20px;
 }
 
 .stock-info h2 {
-    margin: 0 0 5px 0;
-    color: #1976d2;
-    font-size: 32px;
+    margin: 0 0 8px 0;
+    color: #1f2937;
+    font-size: 28px;
 }
 
 .stock-info .ticker {
-    font-size: 18px;
-    color: #666;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* 標籤頁選擇器 */
+.tab-selector {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    border-bottom: 2px solid #e5e7eb;
+    padding-bottom: 0;
+}
+
+.tab-btn {
+    padding: 10px 20px;
+    border: none;
+    background: transparent;
+    font-size: 15px;
     font-weight: 500;
+    color: #6b7280;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s;
+    position: relative;
+    bottom: -2px;
+}
+
+.tab-btn:hover:not(:disabled) {
+    color: #667eea;
+    background: rgba(102, 126, 234, 0.05);
+    border-radius: 8px 8px 0 0;
+}
+
+.tab-btn.active {
+    color: #667eea;
+    border-bottom-color: #667eea;
+    font-weight: 600;
+}
+
+.tab-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* 標籤頁內容 */
+.tab-content {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* 預測控制面板 */
@@ -142,6 +199,8 @@
 }
 
 .predict-button,
+.compare-button,
+.backtest-button,
 .reset-button {
     padding: 12px 30px;
     font-size: 16px;
@@ -164,6 +223,38 @@
 }
 
 .predict-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.compare-button {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+}
+
+.compare-button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.compare-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.backtest-button {
+    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+    color: #1a1a1a;
+}
+
+.backtest-button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.backtest-button:disabled {
     opacity: 0.6;
     cursor: not-allowed;
     transform: none;
@@ -251,7 +342,8 @@
 }
 
 /* 預測結果 */
-.prediction-result {
+.prediction-result,
+.comparison-result {
     animation: fadeIn 0.5s ease-in;
 }
 
@@ -264,6 +356,14 @@
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+.comparison-result h3 {
+    margin: 0 0 20px 0;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e0e0e0;
+    color: #1976d2;
+    font-size: 24px;
 }
 
 /* 免責聲明 */
